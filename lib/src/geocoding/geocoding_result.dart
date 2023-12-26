@@ -1,6 +1,6 @@
-import 'package:google_geocoding/src/models/address_component.dart';
-import 'package:google_geocoding/src/models/geometry.dart';
-import 'package:google_geocoding/src/models/plus_code.dart';
+import 'package:google_geocoding_plus/src/models/address_component.dart';
+import 'package:google_geocoding_plus/src/models/geometry.dart';
+import 'package:google_geocoding_plus/src/models/plus_code.dart';
 
 class GeocodingResult {
   final List<AddressComponent>? addressComponents;

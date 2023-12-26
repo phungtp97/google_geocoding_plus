@@ -1,6 +1,6 @@
-import 'package:google_geocoding/src/models/bounds.dart';
-import 'package:google_geocoding/src/models/component.dart';
-import 'package:google_geocoding/src/models/lat_lon.dart';
+import 'package:google_geocoding_plus/src/models/bounds.dart';
+import 'package:google_geocoding_plus/src/models/component.dart';
+import 'package:google_geocoding_plus/src/models/lat_lon.dart';
 
 class GeocodingParameters {
   static Map<String, String> createGeocodingParameters(

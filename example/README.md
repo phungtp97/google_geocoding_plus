@@ -1,6 +1,6 @@
 # Example
 
-An example for **google_geocoding** package.
+An example for **google_geocoding_plus** package.
 
 ## Preview
 

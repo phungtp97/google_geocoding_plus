@@ -2,12 +2,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_geocoding/google_geocoding.dart';
-import 'package:google_place/google_place.dart' as googlePlace;
+import 'package:google_geocoding_plus/google_geocoding_plus.dart';
+import 'package:google_place_plus/google_place_plus.dart' as googlePlace;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DotEnv().load('.env');
+  await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
 
@@ -31,7 +31,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  GoogleGeocoding googleGeocoding;
+  GoogleGeocoding? googleGeocoding;
   var addressController = TextEditingController();
   double latitude = 0;
   double longitude = 0;
@@ -41,8 +41,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    String apiKey = DotEnv().env['API_KEY'];
-    googleGeocoding = GoogleGeocoding(apiKey);
+    String? apiKey = dotenv.env['API_KEY'];
+    if (apiKey != null) googleGeocoding = GoogleGeocoding(apiKey);
     super.initState();
   }
 
@@ -97,6 +97,7 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.blueAccent,
                     ),
                     onChanged: (value) {
+                      if (value == null) return;
                       setState(() {
                         geocodingTypes = value;
                       });
@@ -247,15 +248,17 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                               ),
                             ),
-                            title:
-                                Text(geocodingResults[index].formattedAddress),
+                            title: Text(
+                                geocodingResults[index].formattedAddress ?? ''),
                             onTap: () {
                               debugPrint(geocodingResults[index].placeId);
+                              if (geocodingResults[index].placeId == null)
+                                return;
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => DetailsPage(
-                                    placeId: geocodingResults[index].placeId,
+                                    placeId: geocodingResults[index].placeId!,
                                   ),
                                 ),
                               );
@@ -274,16 +277,19 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             title: Text(reverseGeocodingResults[index]
-                                .formattedAddress),
+                                    .formattedAddress ??
+                                ''),
                             onTap: () {
                               debugPrint(
                                   reverseGeocodingResults[index].placeId);
+                              if (reverseGeocodingResults[index].placeId ==
+                                  null) return;
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => DetailsPage(
                                     placeId:
-                                        reverseGeocodingResults[index].placeId,
+                                        reverseGeocodingResults[index].placeId!,
                                   ),
                                 ),
                               );
@@ -304,11 +310,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void geocodingSearch(String value) async {
-    var response = await googleGeocoding.geocoding.get(value, null);
+    var response = await googleGeocoding?.geocoding.get(value);
     if (response != null && response.results != null) {
+      if (response.results == null) return;
       if (mounted) {
         setState(() {
-          geocodingResults = response.results;
+          geocodingResults = response.results!;
         });
       }
     } else {
@@ -320,12 +327,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void reverseGeocodingSearch(LatLon latlng) async {
-    var response = await googleGeocoding.geocoding.getReverse(latlng);
+  void reverseGeocodingSearch(LatLon latLng) async {
+    var response = await googleGeocoding?.geocoding.getReverse(latLng);
     if (response != null && response.results != null) {
+      if (response.results == null) return;
       if (mounted) {
         setState(() {
-          reverseGeocodingResults = response.results;
+          reverseGeocodingResults = response.results!;
         });
       }
     } else {
@@ -341,7 +349,7 @@ class _HomePageState extends State<HomePage> {
 class DetailsPage extends StatefulWidget {
   final String placeId;
 
-  DetailsPage({Key key, this.placeId}) : super(key: key);
+  const DetailsPage({Key? key, required this.placeId}) : super(key: key);
 
   @override
   _DetailsPageState createState() => _DetailsPageState(this.placeId);
@@ -349,18 +357,18 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   final String placeId;
-  googlePlace.GooglePlace gPlace;
+  googlePlace.GooglePlace? gPlace;
 
   _DetailsPageState(this.placeId);
 
-  googlePlace.DetailsResult detailsResult;
+  googlePlace.DetailsResult? detailsResult;
   List<Uint8List> images = [];
 
   @override
   void initState() {
-    String apiKey = DotEnv().env['API_KEY'];
-    gPlace = googlePlace.GooglePlace(apiKey);
-    getDetils(this.placeId);
+    String? apiKey = dotenv.env['API_KEY'];
+    if (apiKey != null) gPlace = googlePlace.GooglePlace(apiKey);
+    getDetails(this.placeId);
     super.initState();
   }
 
@@ -374,7 +382,7 @@ class _DetailsPageState extends State<DetailsPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blueAccent,
         onPressed: () {
-          getDetils(this.placeId);
+          getDetails(this.placeId);
         },
         child: Icon(Icons.refresh),
       ),
@@ -430,19 +438,19 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
                       ),
-                      detailsResult != null && detailsResult.types != null
+                      detailsResult?.types != null
                           ? Container(
                               margin: EdgeInsets.only(left: 15, top: 10),
                               height: 50,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: detailsResult.types.length,
+                                itemCount: detailsResult!.types!.length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                     margin: EdgeInsets.only(right: 10),
                                     child: Chip(
                                       label: Text(
-                                        detailsResult.types[index],
+                                        detailsResult!.types![index],
                                         style: TextStyle(
                                           color: Colors.white,
                                         ),
@@ -462,8 +470,8 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                           title: Text(
                             detailsResult != null &&
-                                    detailsResult.formattedAddress != null
-                                ? 'Address: ${detailsResult.formattedAddress}'
+                                    detailsResult!.formattedAddress != null
+                                ? 'Address: ${detailsResult!.formattedAddress}'
                                 : "Address: null",
                           ),
                         ),
@@ -475,10 +483,8 @@ class _DetailsPageState extends State<DetailsPage> {
                             child: Icon(Icons.location_searching),
                           ),
                           title: Text(
-                            detailsResult != null &&
-                                    detailsResult.geometry != null &&
-                                    detailsResult.geometry.location != null
-                                ? 'Geometry: ${detailsResult.geometry.location.lat.toString()},${detailsResult.geometry.location.lng.toString()}'
+                            detailsResult?.geometry?.location != null
+                                ? 'Geometry: ${detailsResult?.geometry?.location?.lat},${detailsResult?.geometry?.location?.lng}'
                                 : "Geometry: null",
                           ),
                         ),
@@ -490,9 +496,8 @@ class _DetailsPageState extends State<DetailsPage> {
                             child: Icon(Icons.timelapse),
                           ),
                           title: Text(
-                            detailsResult != null &&
-                                    detailsResult.utcOffset != null
-                                ? 'UTC offset: ${detailsResult.utcOffset.toString()} min'
+                            detailsResult?.utcOffset != null
+                                ? 'UTC offset: ${detailsResult!.utcOffset} min'
                                 : "UTC offset: null",
                           ),
                         ),
@@ -504,9 +509,8 @@ class _DetailsPageState extends State<DetailsPage> {
                             child: Icon(Icons.rate_review),
                           ),
                           title: Text(
-                            detailsResult != null &&
-                                    detailsResult.rating != null
-                                ? 'Rating: ${detailsResult.rating.toString()}'
+                            detailsResult?.rating != null
+                                ? 'Rating: ${detailsResult!.rating}'
                                 : "Rating: null",
                           ),
                         ),
@@ -518,9 +522,8 @@ class _DetailsPageState extends State<DetailsPage> {
                             child: Icon(Icons.attach_money),
                           ),
                           title: Text(
-                            detailsResult != null &&
-                                    detailsResult.priceLevel != null
-                                ? 'Price level: ${detailsResult.priceLevel.toString()}'
+                            detailsResult?.priceLevel != null
+                                ? 'Price level: ${detailsResult?.priceLevel}'
                                 : "Price level: null",
                           ),
                         ),
@@ -540,24 +543,24 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  void getDetils(String placeId) async {
-    var result = await gPlace.details.get(placeId);
+  void getDetails(String placeId) async {
+    var result = await gPlace?.details.get(placeId);
     if (result != null && result.result != null && mounted) {
       setState(() {
         detailsResult = result.result;
         images = [];
       });
 
-      if (result.result.photos != null) {
-        for (var photo in result.result.photos) {
-          getPhoto(photo.photoReference);
+      if (result.result?.photos != null) {
+        for (var photo in result.result!.photos!) {
+          getPhoto(photo.photoReference!);
         }
       }
     }
   }
 
   void getPhoto(String photoReference) async {
-    var result = await gPlace.photos.get(photoReference, null, 400);
+    var result = await gPlace?.photos.get(photoReference: photoReference, maxWidth: 400);
     if (result != null && mounted) {
       setState(() {
         images.add(result);

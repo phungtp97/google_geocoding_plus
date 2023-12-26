@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:google_geocoding/src/geocoding/geocoding_result.dart';
+import 'package:google_geocoding_plus/src/geocoding/geocoding_result.dart';
 
 class GeocodingResponse {
   final String? status;

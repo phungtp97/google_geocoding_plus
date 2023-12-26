@@ -1,9 +1,6 @@
-# google_geocoding
+# google_geocoding_plus
 
-## Discontinued
-
-### This project is no longer maintained, and will not receive further updates.
-
+This package is forked from https://github.com/bazrafkan, appreciate your contribution.
 
 A Flutter plugin that provides a [Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/start).
 
@@ -20,7 +17,7 @@ You can also use the Geocoding API to find the address for a given place ID.
 
 ## Usage
 
-To use this plugin, add **google_geocoding** as a [dependency in your pubspec.yaml file](https://flutter.dev/docs/development/packages-and-plugins/using-packages).
+To use this plugin, add **google_geocoding_plus** as a [dependency in your pubspec.yaml file](https://flutter.dev/docs/development/packages-and-plugins/using-packages).
 
 ## Getting Started
 
@@ -30,7 +27,7 @@ To use this plugin, add **google_geocoding** as a [dependency in your pubspec.ya
 
 ## Example
 
-- [Example](https://github.com/bazrafkan/google_geocoding/blob/master/example)
+- [Example](https://github.com/bazrafkan/google_geocoding_plus/blob/master/example)
 
   ![Home page - Geocoding](example/images/home_geocoding.png)
 

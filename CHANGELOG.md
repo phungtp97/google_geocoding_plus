@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.0.0] - 2021-03-15
+
+- Reformatting code: add null-safety
+- Upgrade environment to match sdk: ">=2.12.0 <4.0.0"
+- Upgrade http to ^1.0.0
+
 ## [0.2.0] - 2021-03-15
 
 - Add null-safety

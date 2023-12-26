@@ -1,9 +1,9 @@
-import 'package:google_geocoding/src/geocoding/geocoding_parameters.dart';
-import 'package:google_geocoding/src/geocoding/geocoding_response.dart';
-import 'package:google_geocoding/src/models/bounds.dart';
-import 'package:google_geocoding/src/models/component.dart';
-import 'package:google_geocoding/src/models/lat_lon.dart';
-import 'package:google_geocoding/src/utils/network_utility.dart';
+import 'package:google_geocoding_plus/src/geocoding/geocoding_parameters.dart';
+import 'package:google_geocoding_plus/src/geocoding/geocoding_response.dart';
+import 'package:google_geocoding_plus/src/models/bounds.dart';
+import 'package:google_geocoding_plus/src/models/component.dart';
+import 'package:google_geocoding_plus/src/models/lat_lon.dart';
+import 'package:google_geocoding_plus/src/utils/network_utility.dart';
 
 class Geocoding {
   final _authority = 'maps.googleapis.com';
@@ -41,8 +41,8 @@ class Geocoding {
   /// [region] Optional parameters - The region code, specified as a ccTLD ("top-level domain") two-character value. This parameter
   /// will only influence, not fully restrict, results from the geocoder.
   Future<GeocodingResponse?> get(
-    String address,
-    List<Component> components, {
+    String address, {
+    List<Component>? components,
     Bounds? bounds,
     String? language,
     String? region,

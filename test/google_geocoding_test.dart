@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_geocoding/google_geocoding.dart';
+import 'package:google_geocoding_plus/google_geocoding_plus.dart';
 
 void main() {
   test('adds one to input values', () {

@@ -1,6 +1,6 @@
-import 'package:google_geocoding/src/models/bounds.dart';
-import 'package:google_geocoding/src/models/location.dart';
-import 'package:google_geocoding/src/models/viewport.dart';
+import 'package:google_geocoding_plus/src/models/bounds.dart';
+import 'package:google_geocoding_plus/src/models/location.dart';
+import 'package:google_geocoding_plus/src/models/viewport.dart';
 
 class Geometry {
   final Location? location;
